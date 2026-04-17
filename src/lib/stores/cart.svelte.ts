@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import type { CartItem, Product } from '$lib/types';
+import type { CartItem, ColorOption, Product } from '$lib/types';
 
 const STORAGE_KEY = 'eye-creatures-cart';
 
@@ -11,6 +11,17 @@ function loadInitial(): CartItem[] {
 	} catch {
 		return [];
 	}
+}
+
+function sameVariant(
+	item: CartItem,
+	productId: number,
+	size: string | null,
+	colorHex: string | null
+) {
+	return (
+		item.productId === productId && item.size === size && (item.color?.hex ?? null) === colorHex
+	);
 }
 
 function createCart() {
@@ -30,8 +41,8 @@ function createCart() {
 		get subtotal() {
 			return items.reduce((sum, it) => sum + it.price * it.quantity, 0);
 		},
-		addItem(product: Product, size: string | null, quantity: number) {
-			const existing = items.find((it) => it.productId === product.id && it.size === size);
+		addItem(product: Product, size: string | null, color: ColorOption | null, quantity: number) {
+			const existing = items.find((it) => sameVariant(it, product.id, size, color?.hex ?? null));
 			if (existing) {
 				existing.quantity += quantity;
 			} else {
@@ -40,15 +51,20 @@ function createCart() {
 					slug: product.slug,
 					name: product.name,
 					price: product.price,
-					image: product.image,
 					size,
+					color,
 					quantity
 				});
 			}
 			persist();
 		},
-		updateQuantity(productId: number, size: string | null, quantity: number) {
-			const item = items.find((it) => it.productId === productId && it.size === size);
+		updateQuantity(
+			productId: number,
+			size: string | null,
+			colorHex: string | null,
+			quantity: number
+		) {
+			const item = items.find((it) => sameVariant(it, productId, size, colorHex));
 			if (!item) return;
 			if (quantity <= 0) {
 				items = items.filter((it) => it !== item);
@@ -57,8 +73,8 @@ function createCart() {
 			}
 			persist();
 		},
-		removeItem(productId: number, size: string | null) {
-			items = items.filter((it) => !(it.productId === productId && it.size === size));
+		removeItem(productId: number, size: string | null, colorHex: string | null) {
+			items = items.filter((it) => !sameVariant(it, productId, size, colorHex));
 			persist();
 		},
 		clear() {

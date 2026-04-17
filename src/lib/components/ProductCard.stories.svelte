@@ -17,12 +17,13 @@
 	args={{
 		product: {
 			id: 1,
-			slug: 'shirt',
-			name: 'Eye Creatures Shirt',
+			slug: 'mothman-shirt',
+			name: 'Mothman Shirt',
+			category: 'shirt',
 			price: 25,
-			description: 'Heavyweight black tee.',
-			image: '/products/shirt.svg',
-			sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL']
+			description: null,
+			sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
+			colors: null
 		}
 	}}
 />
@@ -32,12 +33,13 @@
 	args={{
 		product: {
 			id: 2,
-			slug: 'tape',
-			name: 'Debut Cassette',
+			slug: 'attack-of-the-tape',
+			name: 'Attack of the Tape',
+			category: 'tape',
 			price: 10,
 			description: null,
-			image: '/products/tape.svg',
-			sizes: null
+			sizes: null,
+			colors: null
 		}
 	}}
 />

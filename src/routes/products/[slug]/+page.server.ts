@@ -16,10 +16,11 @@ export const load: PageServerLoad = async ({ params }) => {
 		id: row.id,
 		slug: row.slug,
 		name: row.name,
+		category: row.category,
 		price: row.price,
 		description: row.description,
-		image: row.image,
-		sizes: row.sizes
+		sizes: row.sizes,
+		colors: row.colors
 	};
 	return { product: p };
 };

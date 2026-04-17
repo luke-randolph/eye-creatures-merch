@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import QuantitySelector from '$lib/components/QuantitySelector.svelte';
+	import { getProductImage } from '$lib/productImages';
 	import { cart } from '$lib/stores/cart.svelte';
+	import { X } from 'lucide-svelte';
 
 	function checkout() {
 		alert('Checkout is not wired up yet.');
@@ -18,13 +20,17 @@
 		</p>
 	{:else}
 		<ul class="flex flex-col divide-y divide-neutral-800 border-y border-neutral-800">
-			{#each cart.items as item (item.productId + ':' + (item.size ?? ''))}
+			{#each cart.items as item (item.productId + ':' + (item.size ?? '') + ':' + (item.color?.hex ?? ''))}
+				{@const image = getProductImage(item.color?.imageSlug ?? item.slug)}
+				{@const colorHex = item.color?.hex ?? null}
 				<li class="flex items-center gap-4 py-4">
 					<a
 						href={resolve('/products/[slug]', { slug: item.slug })}
 						class="shrink-0 overflow-hidden rounded border border-neutral-800 bg-neutral-950"
 					>
-						<img src={item.image} alt={item.name} class="h-20 w-20 object-cover" />
+						{#if image}
+							<enhanced:img src={image} alt={item.name} class="h-20 w-20 object-cover" />
+						{/if}
 					</a>
 
 					<div class="min-w-0 flex-1">
@@ -32,6 +38,9 @@
 							href={resolve('/products/[slug]', { slug: item.slug })}
 							class="font-medium hover:underline">{item.name}</a
 						>
+						{#if item.color}
+							<p class="text-sm text-neutral-400">Color: {item.color.label}</p>
+						{/if}
 						{#if item.size}
 							<p class="text-sm text-neutral-400">Size: {item.size}</p>
 						{/if}
@@ -40,36 +49,24 @@
 
 					<QuantitySelector
 						value={item.quantity}
-						onChange={(n) => cart.updateQuantity(item.productId, item.size, n)}
+						onChange={(n) => cart.updateQuantity(item.productId, item.size, colorHex, n)}
 					/>
 
 					<div class="w-20 text-right tabular-nums">${item.price * item.quantity}</div>
 
 					<button
 						type="button"
-						onclick={() => cart.removeItem(item.productId, item.size)}
+						onclick={() => cart.removeItem(item.productId, item.size, colorHex)}
 						aria-label="Remove {item.name} from cart"
 						class="p-2 text-neutral-500 hover:text-white"
 					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="1.8"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="h-5 w-5"
-							aria-hidden="true"
-						>
-							<path d="M18 6 6 18M6 6l12 12" />
-						</svg>
+						<X class="h-5 w-5" aria-hidden="true" />
 					</button>
 				</li>
 			{/each}
 		</ul>
 
-		<div class="flex items-center justify-between border-t border-neutral-800 pt-6">
+		<div class="flex items-center justify-between pt-6">
 			<span class="text-lg text-neutral-400">Subtotal</span>
 			<span class="text-2xl font-bold tabular-nums">${cart.subtotal}</span>
 		</div>

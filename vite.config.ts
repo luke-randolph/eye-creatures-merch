@@ -1,4 +1,5 @@
 /// <reference types="vitest/config" />
+import { enhancedImages } from '@sveltejs/enhanced-img';
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
@@ -11,7 +12,7 @@ const dirname =
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
-	plugins: [tailwindcss(), sveltekit()],
+	plugins: [enhancedImages(), tailwindcss(), sveltekit()],
 	test: {
 		projects: [
 			{

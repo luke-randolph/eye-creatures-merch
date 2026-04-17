@@ -4,36 +4,52 @@ import { product } from './schema';
 
 const seedProducts = [
 	{
-		slug: 'shirt',
-		name: 'Eye Creatures Shirt',
+		slug: 'mothman-shirt',
+		name: 'Mothman Shirt',
+		category: 'shirt',
 		price: 25,
-		description: 'Heavyweight black tee with the Eye Creatures logo printed on the front.',
-		image: '/products/shirt.svg',
-		sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL']
+		description: null,
+		sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
+		colors: null
 	},
 	{
-		slug: 'tape',
-		name: 'Debut Cassette',
+		slug: 'eye-creature-vs-city-shirt',
+		name: 'Eye Creature vs City Shirt',
+		category: 'shirt',
+		price: 25,
+		description: null,
+		sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
+		colors: [
+			{ hex: '#000000', label: 'Black', imageSlug: 'eye-creature-vs-city-shirt-black' },
+			{ hex: '#01c48e', label: 'Green', imageSlug: 'eye-creature-vs-city-shirt-green' }
+		]
+	},
+	{
+		slug: 'attack-of-the-tape',
+		name: 'Attack of the Tape',
+		category: 'tape',
 		price: 10,
-		description: 'Limited-run cassette tape of the debut album. Includes digital download code.',
-		image: '/products/tape.svg',
-		sizes: null
+		description: null,
+		sizes: null,
+		colors: null
 	},
 	{
-		slug: 'cd',
-		name: 'Debut CD',
+		slug: 'insert-disc-2-cd',
+		name: 'Insert Disc 2 CD',
+		category: 'cd',
 		price: 12,
-		description: 'Compact disc pressing of the debut album in a gatefold sleeve.',
-		image: '/products/cd.svg',
-		sizes: null
+		description: null,
+		sizes: null,
+		colors: null
 	},
 	{
-		slug: 'stickers',
+		slug: 'sticker-pack',
 		name: 'Sticker Pack',
+		category: 'stickers',
 		price: 5,
-		description: 'Five vinyl stickers featuring assorted Eye Creatures artwork.',
-		image: '/products/stickers.svg',
-		sizes: null
+		description: null,
+		sizes: null,
+		colors: null
 	}
 ];
 
@@ -44,19 +60,11 @@ async function main() {
 	const client = await mysql.createConnection(url);
 	const db = drizzle(client, { mode: 'default' });
 
+	await db.delete(product);
+	console.log('cleared existing products');
+
 	for (const p of seedProducts) {
-		await db
-			.insert(product)
-			.values(p)
-			.onDuplicateKeyUpdate({
-				set: {
-					name: p.name,
-					price: p.price,
-					description: p.description,
-					image: p.image,
-					sizes: p.sizes
-				}
-			});
+		await db.insert(product).values(p);
 		console.log(`seeded ${p.slug}`);
 	}
 
