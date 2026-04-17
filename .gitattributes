@@ -1,0 +1,4 @@
+# Enforce LF line endings everywhere, regardless of OS.
+# Keeps diffs clean, husky shell hooks executable on Windows, and files
+# identical across Mac/Linux/Windows checkouts.
+* text=auto eol=lf
