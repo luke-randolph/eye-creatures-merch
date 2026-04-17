@@ -1,5 +1,5 @@
-import { drizzle } from 'drizzle-orm/mysql2';
-import mysql from 'mysql2/promise';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
 import { product } from './schema';
 
 const seedProducts = [
@@ -57,8 +57,8 @@ async function main() {
 	const url = process.env.DATABASE_URL;
 	if (!url) throw new Error('DATABASE_URL is not set');
 
-	const client = await mysql.createConnection(url);
-	const db = drizzle(client, { mode: 'default' });
+	const client = postgres(url);
+	const db = drizzle(client);
 
 	await db.delete(product);
 	console.log('cleared existing products');
