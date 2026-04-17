@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Shirt placeholder">
+  <rect width="400" height="400" fill="#1f1b2e" />
+  <path d="M120 90 L160 70 Q200 110 240 70 L280 90 L320 130 L280 160 L280 330 L120 330 L120 160 L80 130 Z" fill="#3d2f5c" stroke="#8b7ed4" stroke-width="3" />
+  <circle cx="200" cy="200" r="40" fill="none" stroke="#c4b5fd" stroke-width="3" />
+  <circle cx="200" cy="200" r="16" fill="#c4b5fd" />
+  <text x="200" y="370" text-anchor="middle" font-family="monospace" font-size="20" fill="#c4b5fd" letter-spacing="3">SHIRT</text>
+</svg>

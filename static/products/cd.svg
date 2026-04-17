@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="CD placeholder">
+  <rect width="400" height="400" fill="#2e1a1f" />
+  <circle cx="200" cy="200" r="140" fill="#4a2d35" stroke="#d47e9f" stroke-width="3" />
+  <circle cx="200" cy="200" r="130" fill="none" stroke="#d47e9f" stroke-width="1" opacity="0.6" />
+  <circle cx="200" cy="200" r="110" fill="none" stroke="#d47e9f" stroke-width="1" opacity="0.4" />
+  <circle cx="200" cy="200" r="90" fill="none" stroke="#d47e9f" stroke-width="1" opacity="0.3" />
+  <circle cx="200" cy="200" r="40" fill="#1a0f12" />
+  <circle cx="200" cy="200" r="10" fill="#2e1a1f" stroke="#d47e9f" stroke-width="2" />
+  <text x="200" y="380" text-anchor="middle" font-family="monospace" font-size="20" fill="#d47e9f" letter-spacing="3">CD</text>
+</svg>

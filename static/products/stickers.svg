@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Sticker pack placeholder">
+  <rect width="400" height="400" fill="#2e2a1a" />
+  <g transform="rotate(-8 120 140)">
+    <rect x="80" y="100" width="100" height="100" rx="6" fill="#d4c47e" stroke="#1a1710" stroke-width="3" />
+    <circle cx="130" cy="150" r="24" fill="#1a1710" />
+  </g>
+  <g transform="rotate(12 270 140)">
+    <rect x="220" y="100" width="100" height="100" rx="6" fill="#7ec4d4" stroke="#1a1710" stroke-width="3" />
+    <path d="M250 180 L270 120 L290 180 Z" fill="#1a1710" />
+  </g>
+  <g transform="rotate(-4 200 280)">
+    <rect x="150" y="230" width="100" height="100" rx="6" fill="#d47ea4" stroke="#1a1710" stroke-width="3" />
+    <text x="200" y="290" text-anchor="middle" font-family="monospace" font-size="38" font-weight="bold" fill="#1a1710">EC</text>
+  </g>
+  <text x="200" y="390" text-anchor="middle" font-family="monospace" font-size="18" fill="#d4c47e" letter-spacing="2">STICKERS</text>
+</svg>
