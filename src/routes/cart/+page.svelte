@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import QuantitySelector from '$lib/components/QuantitySelector.svelte';
-	import { getProductImage } from '$lib/productImages';
 	import { cart } from '$lib/stores/cart.svelte';
 	import { X } from 'lucide-svelte';
 
@@ -21,16 +20,14 @@
 	{:else}
 		<ul class="flex flex-col divide-y divide-neutral-800 border-y border-neutral-800">
 			{#each cart.items as item (item.productId + ':' + (item.size ?? '') + ':' + (item.color?.hex ?? ''))}
-				{@const image = getProductImage(item.color?.imageSlug ?? item.slug)}
+				{@const imageUrl = item.color?.imageUrl ?? item.imageUrl}
 				{@const colorHex = item.color?.hex ?? null}
 				<li class="flex items-center gap-4 py-4">
 					<a
 						href={resolve('/products/[slug]', { slug: item.slug })}
 						class="shrink-0 overflow-hidden rounded border border-neutral-800 bg-neutral-950"
 					>
-						{#if image}
-							<enhanced:img src={image} alt={item.name} class="h-20 w-20 object-cover" />
-						{/if}
+						<img src={imageUrl} alt={item.name} class="h-20 w-20 object-cover" />
 					</a>
 
 					<div class="min-w-0 flex-1">

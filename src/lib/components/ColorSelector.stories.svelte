@@ -13,11 +13,13 @@
 </script>
 
 <script lang="ts">
+	import shirtBlack from '$lib/assets/products/eye-creature-vs-city-shirt-black.png';
+	import shirtGreen from '$lib/assets/products/eye-creature-vs-city-shirt-green.png';
 	import type { ColorOption } from '$lib/types';
 
 	const shirtColors: ColorOption[] = [
-		{ hex: '#000000', label: 'Black', imageSlug: 'eye-creature-vs-city-shirt-black' },
-		{ hex: '#01c48e', label: 'Green', imageSlug: 'eye-creature-vs-city-shirt-green' }
+		{ hex: '#000000', label: 'Black', imageUrl: shirtBlack },
+		{ hex: '#01c48e', label: 'Green', imageUrl: shirtGreen }
 	];
 
 	let selected = $state<ColorOption>(shirtColors[0]);

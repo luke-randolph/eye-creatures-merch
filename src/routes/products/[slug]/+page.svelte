@@ -3,7 +3,6 @@
 	import ColorSelector from '$lib/components/ColorSelector.svelte';
 	import QuantitySelector from '$lib/components/QuantitySelector.svelte';
 	import SizeSelector from '$lib/components/SizeSelector.svelte';
-	import { getProductImage } from '$lib/productImages';
 	import { cart } from '$lib/stores/cart.svelte';
 	import type { ColorOption } from '$lib/types';
 	import { ChevronLeft } from 'lucide-svelte';
@@ -22,8 +21,7 @@
 		selectedColor = product.colors?.[0] ?? null;
 	});
 
-	let imageSlug = $derived(selectedColor ? selectedColor.imageSlug : product.slug);
-	let image = $derived(getProductImage(imageSlug));
+	let imageUrl = $derived(selectedColor ? selectedColor.imageUrl : product.imageUrl);
 
 	let needsSize = $derived(!!product.sizes && product.sizes.length > 0);
 	let canAdd = $derived(!needsSize || selectedSize !== null);
@@ -46,9 +44,7 @@
 
 <div class="grid gap-8 md:grid-cols-2">
 	<div class="overflow-hidden rounded border border-neutral-800 bg-neutral-950">
-		{#if image}
-			<enhanced:img src={image} alt={product.name} class="aspect-square w-full object-cover" />
-		{/if}
+		<img src={imageUrl} alt={product.name} class="aspect-square w-full object-cover" />
 	</div>
 
 	<div class="flex flex-col gap-6">

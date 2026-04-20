@@ -15,7 +15,7 @@ function loadInitial(): CartItem[] {
 
 function sameVariant(
 	item: CartItem,
-	productId: number,
+	productId: string,
 	size: string | null,
 	colorHex: string | null
 ) {
@@ -51,6 +51,7 @@ function createCart() {
 					slug: product.slug,
 					name: product.name,
 					price: product.price,
+					imageUrl: product.imageUrl,
 					size,
 					color,
 					quantity
@@ -59,7 +60,7 @@ function createCart() {
 			persist();
 		},
 		updateQuantity(
-			productId: number,
+			productId: string,
 			size: string | null,
 			colorHex: string | null,
 			quantity: number
@@ -73,7 +74,7 @@ function createCart() {
 			}
 			persist();
 		},
-		removeItem(productId: number, size: string | null, colorHex: string | null) {
+		removeItem(productId: string, size: string | null, colorHex: string | null) {
 			items = items.filter((it) => !sameVariant(it, productId, size, colorHex));
 			persist();
 		},

@@ -1,23 +1,25 @@
-export type ColorOption = { hex: string; label: string; imageSlug: string };
+export type ColorOption = { hex: string; label: string; imageUrl: string };
 
 export type Product = {
-	id: number;
+	id: string;
 	slug: string;
 	name: string;
 	category: string;
 	price: number;
 	description: string | null;
 	sizes: string[] | null;
+	imageUrl: string;
 	colors: ColorOption[] | null;
 };
 
 export type Category = { value: string; label: string };
 
 export type CartItem = {
-	productId: number;
+	productId: string;
 	slug: string;
 	name: string;
 	price: number;
+	imageUrl: string;
 	size: string | null;
 	color: ColorOption | null;
 	quantity: number;
