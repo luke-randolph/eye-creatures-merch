@@ -50,20 +50,20 @@ npm run dev         # opens http://localhost:3333
 
 ## Day-to-day scripts
 
-| Command               | What it does                                              |
-| --------------------- | --------------------------------------------------------- |
-| `npm run dev`         | Start Vite dev server                                     |
-| `npm run build`       | Production build                                          |
-| `npm run preview`     | Preview the production build                              |
-| `npm run check`       | Svelte + TypeScript type check                            |
-| `npm run lint`        | Prettier (check) + ESLint                                 |
-| `npm run format`      | Prettier (write)                                          |
-| `npm run test:e2e`    | Playwright end-to-end tests                               |
-| `npm run storybook`   | Storybook dev server                                      |
-| `npm run db:start`    | `docker compose up` (local Postgres)                      |
-| `npm run db:push`     | Sync `schema.ts` to the DB (dev workflow — see below)     |
-| `npm run db:studio`   | Drizzle Studio (visual DB browser for auth tables)        |
-| `npm run auth:schema` | Regenerate `auth.schema.ts` after editing `auth.ts`       |
+| Command               | What it does                                          |
+| --------------------- | ----------------------------------------------------- |
+| `npm run dev`         | Start Vite dev server                                 |
+| `npm run build`       | Production build                                      |
+| `npm run preview`     | Preview the production build                          |
+| `npm run check`       | Svelte + TypeScript type check                        |
+| `npm run lint`        | Prettier (check) + ESLint                             |
+| `npm run format`      | Prettier (write)                                      |
+| `npm run test:e2e`    | Playwright end-to-end tests                           |
+| `npm run storybook`   | Storybook dev server                                  |
+| `npm run db:start`    | `docker compose up` (local Postgres)                  |
+| `npm run db:push`     | Sync `schema.ts` to the DB (dev workflow — see below) |
+| `npm run db:studio`   | Drizzle Studio (visual DB browser for auth tables)    |
+| `npm run auth:schema` | Regenerate `auth.schema.ts` after editing `auth.ts`   |
 
 ## Content workflow (Sanity)
 
