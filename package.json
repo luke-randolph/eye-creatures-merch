@@ -54,6 +54,7 @@
 		"eslint-plugin-svelte": "^3.17.0",
 		"globals": "^17.4.0",
 		"husky": "^9.1.7",
+		"lint-staged": "^16.4.0",
 		"playwright": "^1.59.1",
 		"postgres": "^3.4.5",
 		"prettier": "^3.8.1",
@@ -73,5 +74,11 @@
 		"@sanity/client": "^7.21.0",
 		"@sanity/image-url": "^2.1.1",
 		"lucide-svelte": "^1.0.1"
+	},
+	"lint-staged": {
+		"*.{ts,js,svelte,json,md,css,html}": [
+			"prettier --write",
+			"eslint --fix"
+		]
 	}
 }
