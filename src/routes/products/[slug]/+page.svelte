@@ -30,7 +30,7 @@
 		if (!canAdd) return;
 		cart.addItem(product, selectedSize, selectedColor, quantity);
 		justAdded = true;
-		setTimeout(() => (justAdded = false), 1500);
+		setTimeout(() => (justAdded = false), 3000);
 	}
 </script>
 
@@ -90,7 +90,9 @@
 			type="button"
 			onclick={addToCart}
 			disabled={!canAdd}
-			class="w-full rounded bg-white px-6 py-3 font-bold tracking-wide text-black transition hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto"
+			class="w-full rounded px-6 py-3 font-bold tracking-wide transition disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto {justAdded
+				? 'bg-success text-white'
+				: 'bg-white text-black hover:bg-neutral-200'}"
 		>
 			{justAdded ? 'Added to cart' : 'Add to cart'}
 		</button>

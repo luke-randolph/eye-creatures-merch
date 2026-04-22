@@ -4,8 +4,37 @@
 	import { cart } from '$lib/stores/cart.svelte';
 	import { X } from 'lucide-svelte';
 
-	function checkout() {
-		alert('Checkout is not wired up yet.');
+	let checkoutPending = $state(false);
+	let checkoutError = $state<string | null>(null);
+
+	async function checkout() {
+		checkoutError = null;
+		checkoutPending = true;
+		try {
+			const res = await fetch('/api/checkout', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					items: cart.items.map((it) => ({
+						productId: it.productId,
+						slug: it.slug,
+						size: it.size,
+						colorHex: it.color?.hex ?? null,
+						quantity: it.quantity
+					}))
+				})
+			});
+			if (!res.ok) {
+				checkoutError = (await res.text()) || 'Checkout failed';
+				return;
+			}
+			const { url } = (await res.json()) as { url: string };
+			window.location.href = url;
+		} catch {
+			checkoutError = 'Network error — please try again';
+		} finally {
+			checkoutPending = false;
+		}
 	}
 </script>
 
@@ -68,13 +97,17 @@
 			<span class="text-2xl font-bold tabular-nums">${cart.subtotal}</span>
 		</div>
 
-		<div class="flex justify-end">
+		<div class="flex flex-col items-end gap-2">
+			{#if checkoutError}
+				<p class="text-sm text-red-400">{checkoutError}</p>
+			{/if}
 			<button
 				type="button"
 				onclick={checkout}
-				class="rounded bg-white px-6 py-3 font-bold tracking-wide text-black hover:bg-neutral-200"
+				disabled={checkoutPending}
+				class="rounded bg-white px-6 py-3 font-bold tracking-wide text-black hover:bg-neutral-200 disabled:opacity-50"
 			>
-				Checkout
+				{checkoutPending ? 'Redirecting…' : 'Checkout'}
 			</button>
 		</div>
 	{/if}
