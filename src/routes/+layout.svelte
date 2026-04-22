@@ -3,8 +3,9 @@
 	import favicon from '$lib/assets/favicon.ico';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
+	import type { LayoutData } from './$types';
 
-	let { children } = $props();
+	let { data, children }: { data: LayoutData; children: import('svelte').Snippet } = $props();
 </script>
 
 <svelte:head>
@@ -12,7 +13,7 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<Header />
+<Header user={data.user} />
 <main class="mx-auto max-w-6xl px-4 py-8">
 	{@render children()}
 </main>

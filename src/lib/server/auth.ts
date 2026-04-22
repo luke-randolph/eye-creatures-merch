@@ -1,16 +1,42 @@
 import { betterAuth } from 'better-auth/minimal';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { sveltekitCookies } from 'better-auth/svelte-kit';
+import { emailOTP } from 'better-auth/plugins/email-otp';
+import { eq, and, isNull } from 'drizzle-orm';
 import { env } from '$env/dynamic/private';
 import { getRequestEvent } from '$app/server';
 import { db } from '$lib/server/db';
+import { orders } from '$lib/server/db/orders.schema';
+import { sendOTPEmail } from '$lib/server/email';
 
 export const auth = betterAuth({
 	baseURL: env.ORIGIN,
 	secret: env.BETTER_AUTH_SECRET,
 	database: drizzleAdapter(db, { provider: 'pg' }),
-	emailAndPassword: { enabled: true },
+	socialProviders: {
+		google: {
+			clientId: env.GOOGLE_CLIENT_ID,
+			clientSecret: env.GOOGLE_CLIENT_SECRET
+		}
+	},
+	databaseHooks: {
+		user: {
+			create: {
+				after: async (newUser) => {
+					await db
+						.update(orders)
+						.set({ userId: newUser.id })
+						.where(and(eq(orders.email, newUser.email), isNull(orders.userId)));
+				}
+			}
+		}
+	},
 	plugins: [
-		sveltekitCookies(getRequestEvent) // make sure this is the last plugin in the array
+		emailOTP({
+			async sendVerificationOTP({ email, otp }) {
+				await sendOTPEmail({ to: email, otp });
+			}
+		}),
+		sveltekitCookies(getRequestEvent) // must remain last
 	]
 });

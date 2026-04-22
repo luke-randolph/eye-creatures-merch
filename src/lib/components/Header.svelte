@@ -3,7 +3,11 @@
 	import logoWhite from '$lib/assets/logo-white.png?enhanced';
 	import { glitchFrames } from '$lib/glitchFrames';
 	import { cart } from '$lib/stores/cart.svelte';
-	import { ShoppingCart } from 'lucide-svelte';
+	import ProfileMenu from '$lib/components/ProfileMenu.svelte';
+	import { ShoppingCart, User as UserIcon } from 'lucide-svelte';
+	import type { User } from 'better-auth';
+
+	let { user }: { user: User | null } = $props();
 
 	const baseLogoSrc = logoWhite.img.src;
 	const glitchSrcs = glitchFrames.map((f) => f.img.src);
@@ -60,7 +64,18 @@
 			</a>
 		</div>
 
-		<div class="flex justify-end">
+		<div class="flex items-center justify-end gap-1">
+			{#if user}
+				<ProfileMenu {user} />
+			{:else}
+				<a
+					href={resolve('/sign-in')}
+					aria-label="Sign in"
+					class="inline-flex items-center rounded p-2 text-neutral-200 hover:bg-neutral-900 hover:text-white"
+				>
+					<UserIcon class="h-6 w-6" aria-hidden="true" />
+				</a>
+			{/if}
 			<a
 				href={resolve('/cart')}
 				aria-label="Cart ({cart.totalItems} {cart.totalItems === 1 ? 'item' : 'items'})"

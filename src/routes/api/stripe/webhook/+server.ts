@@ -1,4 +1,5 @@
 import { env } from '$env/dynamic/private';
+import { eq } from 'drizzle-orm';
 import { stripe } from '$lib/server/stripe';
 import { db } from '$lib/server/db';
 import {
@@ -6,6 +7,7 @@ import {
 	type OrderItemSnapshot,
 	type ShippingAddressSnapshot
 } from '$lib/server/db/orders.schema';
+import { user } from '$lib/server/db/auth.schema';
 import type { RequestHandler } from './$types';
 import type Stripe from 'stripe';
 
@@ -51,6 +53,18 @@ export const POST: RequestHandler = async ({ request }) => {
 				}
 			: null;
 
+		const email = session.customer_details?.email ?? '';
+
+		let userId: string | null = session.metadata?.userId ?? null;
+		if (!userId && email) {
+			const [existing] = await db
+				.select({ id: user.id })
+				.from(user)
+				.where(eq(user.email, email))
+				.limit(1);
+			userId = existing?.id ?? null;
+		}
+
 		await db
 			.insert(orders)
 			.values({
@@ -58,14 +72,14 @@ export const POST: RequestHandler = async ({ request }) => {
 				stripeSessionId: session.id,
 				stripePaymentIntentId:
 					typeof session.payment_intent === 'string' ? session.payment_intent : null,
-				email: session.customer_details?.email ?? '',
+				email,
 				amountTotal: session.amount_total ?? 0,
 				currency: session.currency ?? 'usd',
 				status: 'paid',
 				items,
 				shippingName: shipping?.name ?? null,
 				shippingAddress,
-				userId: null
+				userId
 			})
 			.onConflictDoNothing({ target: orders.stripeSessionId });
 	}

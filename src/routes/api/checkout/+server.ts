@@ -13,7 +13,7 @@ type IncomingItem = {
 	quantity: number;
 };
 
-export const POST: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request, locals }) => {
 	const body = (await request.json().catch(() => null)) as { items?: IncomingItem[] } | null;
 	const incoming = body?.items;
 	if (!Array.isArray(incoming) || incoming.length === 0) {
@@ -85,8 +85,10 @@ export const POST: RequestHandler = async ({ request }) => {
 		],
 		success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
 		cancel_url: `${origin}/checkout/cancel`,
+		...(locals.user ? { customer_email: locals.user.email } : {}),
 		metadata: {
-			cartItems: JSON.stringify(validated.map((v) => v.snapshot))
+			cartItems: JSON.stringify(validated.map((v) => v.snapshot)),
+			...(locals.user ? { userId: locals.user.id } : {})
 		}
 	});
 
