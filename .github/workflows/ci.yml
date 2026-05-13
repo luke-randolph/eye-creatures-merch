@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Write dummy .env for type generation
+        run: |
+          cat > .env <<'EOF'
+          PUBLIC_SANITY_PROJECT_ID=ci
+          PUBLIC_SANITY_DATASET=ci
+          PUBLIC_SANITY_API_VERSION=2026-04-20
+          EOF
+
+      - run: npm run check
+
+      - run: npm run lint

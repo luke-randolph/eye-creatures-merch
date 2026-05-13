@@ -9,14 +9,19 @@ import { db } from '$lib/server/db';
 import { orders } from '$lib/server/db/orders.schema';
 import { sendOTPEmail } from '$lib/server/email';
 
+const GOOGLE_CLIENT_ID = env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = env.GOOGLE_CLIENT_SECRET;
+if (!GOOGLE_CLIENT_ID) throw new Error('GOOGLE_CLIENT_ID is not set');
+if (!GOOGLE_CLIENT_SECRET) throw new Error('GOOGLE_CLIENT_SECRET is not set');
+
 export const auth = betterAuth({
 	baseURL: env.ORIGIN,
 	secret: env.BETTER_AUTH_SECRET,
 	database: drizzleAdapter(db, { provider: 'pg' }),
 	socialProviders: {
 		google: {
-			clientId: env.GOOGLE_CLIENT_ID,
-			clientSecret: env.GOOGLE_CLIENT_SECRET
+			clientId: GOOGLE_CLIENT_ID,
+			clientSecret: GOOGLE_CLIENT_SECRET
 		}
 	},
 	databaseHooks: {

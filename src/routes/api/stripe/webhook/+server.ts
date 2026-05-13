@@ -11,7 +11,8 @@ import { user } from '$lib/server/db/auth.schema';
 import type { RequestHandler } from './$types';
 import type Stripe from 'stripe';
 
-if (!env.STRIPE_WEBHOOK_SECRET) throw new Error('STRIPE_WEBHOOK_SECRET is not set');
+const STRIPE_WEBHOOK_SECRET = env.STRIPE_WEBHOOK_SECRET;
+if (!STRIPE_WEBHOOK_SECRET) throw new Error('STRIPE_WEBHOOK_SECRET is not set');
 
 export const POST: RequestHandler = async ({ request }) => {
 	const sig = request.headers.get('stripe-signature');
@@ -21,7 +22,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	let event: Stripe.Event;
 	try {
-		event = stripe.webhooks.constructEvent(rawBody, sig, env.STRIPE_WEBHOOK_SECRET);
+		event = stripe.webhooks.constructEvent(rawBody, sig, STRIPE_WEBHOOK_SECRET);
 	} catch (err) {
 		const message = err instanceof Error ? err.message : 'Invalid signature';
 		return new Response(`Webhook signature error: ${message}`, { status: 400 });
