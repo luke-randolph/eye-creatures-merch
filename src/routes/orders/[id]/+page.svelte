@@ -87,4 +87,4 @@
 	</section>
 {/if}
 
-<p class="text-xs text-neutral-500">Order ID: {order.id}</p>
+<p class="text-xs text-neutral-400">Order ID: {order.id}</p>

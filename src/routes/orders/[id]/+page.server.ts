@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
 	const [order] = await db.select().from(orders).where(eq(orders.id, params.id)).limit(1);
 
-	if (!order || order.userId !== locals.user.id) {
+	if (!order || order.userId !== locals.user.id || order.status !== 'paid') {
 		throw error(404, 'Order not found');
 	}
 

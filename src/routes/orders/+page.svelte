@@ -48,7 +48,7 @@
 						<p class="mt-1 font-medium text-white">
 							{itemCount(order.items)}
 							{itemCount(order.items) === 1 ? 'item' : 'items'}
-							<span class="ml-2 text-xs tracking-wide text-neutral-500 uppercase">
+							<span class="ml-2 text-xs tracking-wide text-neutral-400 uppercase">
 								{order.status}
 							</span>
 						</p>
@@ -57,7 +57,7 @@
 						<p class="font-medium text-white">
 							{formatAmount(order.amountTotal, order.currency)}
 						</p>
-						<p class="text-xs text-neutral-500">View details →</p>
+						<p class="text-xs text-neutral-400">View details →</p>
 					</div>
 				</a>
 			</li>

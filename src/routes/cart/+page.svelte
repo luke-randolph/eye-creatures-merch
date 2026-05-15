@@ -56,7 +56,13 @@
 						href={resolve('/products/[slug]', { slug: item.slug })}
 						class="shrink-0 overflow-hidden rounded border border-neutral-800 bg-neutral-950"
 					>
-						<img src={imageUrl} alt={item.name} class="h-20 w-20 object-cover" />
+						<img
+							src={imageUrl}
+							alt={item.name}
+							width="80"
+							height="80"
+							class="h-20 w-20 object-cover"
+						/>
 					</a>
 
 					<div class="min-w-0 flex-1">

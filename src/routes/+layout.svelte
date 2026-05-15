@@ -13,8 +13,20 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<Header user={data.user} />
-<main class="mx-auto max-w-6xl px-4 py-8">
-	{@render children()}
-</main>
-<Footer />
+<a
+	href="#main-content"
+	class="sr-only rounded bg-white px-4 py-2 font-bold text-black focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50"
+>
+	Skip to content
+</a>
+<div class="flex min-h-dvh flex-col">
+	<Header user={data.user} />
+	<main
+		id="main-content"
+		tabindex="-1"
+		class="mx-auto w-full max-w-6xl flex-1 px-4 py-8 focus:outline-none"
+	>
+		{@render children()}
+	</main>
+	<Footer />
+</div>

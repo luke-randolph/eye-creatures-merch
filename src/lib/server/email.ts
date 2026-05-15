@@ -11,7 +11,7 @@ export async function sendOTPEmail({ to, otp }: { to: string; otp: string }): Pr
 
 	const from = env.EMAIL_FROM || 'onboarding@resend.dev';
 
-	await resend.emails.send({
+	const { data, error } = await resend.emails.send({
 		from,
 		to,
 		subject: 'Your Eye Creatures sign-in code',
@@ -24,4 +24,11 @@ export async function sendOTPEmail({ to, otp }: { to: string; otp: string }): Pr
 			</div>
 		`
 	});
+
+	if (error) {
+		console.error(`[email] Resend failed to send OTP to ${to}:`, error);
+		throw new Error(`Failed to send sign-in code: ${error.message}`);
+	}
+
+	console.log(`[email] OTP sent to ${to} (Resend id: ${data?.id})`);
 }

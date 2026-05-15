@@ -38,3 +38,43 @@ jobs:
       - run: npm run check
 
       - run: npm run lint
+
+  e2e:
+    runs-on: ubuntu-latest
+
+    # Placeholder values — the smoke test doesn't authenticate or hit Sanity.
+    # DATABASE_URL only needs to be a parseable connection string.
+    env:
+      DATABASE_URL: postgres://ci:ci@localhost:5432/ci
+      ORIGIN: http://localhost:4173
+      BETTER_AUTH_SECRET: ci-placeholder-secret-not-used-for-anything-real
+      PUBLIC_SANITY_PROJECT_ID: ci
+      PUBLIC_SANITY_DATASET: production
+      PUBLIC_SANITY_API_VERSION: 2026-04-20
+      GOOGLE_CLIENT_ID: ci
+      GOOGLE_CLIENT_SECRET: ci
+      STRIPE_SECRET_KEY: sk_test_ci_placeholder
+      STRIPE_WEBHOOK_SECRET: whsec_ci_placeholder
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run smoke e2e
+        run: npm run test:e2e
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

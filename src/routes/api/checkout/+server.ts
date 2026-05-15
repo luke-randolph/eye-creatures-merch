@@ -2,7 +2,8 @@ import { error, json } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 import { stripe } from '$lib/server/stripe';
 import { getProductBySlug } from '$lib/server/sanity/products';
-import type { OrderItemSnapshot } from '$lib/server/db/orders.schema';
+import { db } from '$lib/server/db';
+import { orders, type OrderItemSnapshot } from '$lib/server/db/orders.schema';
 import type { RequestHandler } from './$types';
 
 type IncomingItem = {
@@ -85,13 +86,24 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		],
 		success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
 		cancel_url: `${origin}/checkout/cancel`,
-		...(locals.user ? { customer_email: locals.user.email } : {}),
-		metadata: {
-			cartItems: JSON.stringify(validated.map((v) => v.snapshot)),
-			...(locals.user ? { userId: locals.user.id } : {})
-		}
+		...(locals.user ? { customer_email: locals.user.email } : {})
 	});
 
 	if (!session.url) throw error(500, 'Stripe did not return a checkout URL');
+
+	// Persist the cart as a `pending` order; the webhook flips it to `paid`.
+	// Kept in our DB, not Stripe metadata, which caps values at 500 chars.
+	const items = validated.map((v) => v.snapshot);
+	await db.insert(orders).values({
+		id: crypto.randomUUID(),
+		stripeSessionId: session.id,
+		email: locals.user?.email ?? '',
+		amountTotal: items.reduce((sum, it) => sum + it.unitAmount * it.quantity, 0),
+		currency: 'usd',
+		status: 'pending',
+		items,
+		userId: locals.user?.id ?? null
+	});
+
 	return json({ url: session.url });
 };

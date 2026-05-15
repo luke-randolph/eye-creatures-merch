@@ -36,13 +36,13 @@
 
 	const followUs: SocialLink[] = [
 		{ href: 'https://eyecreatures.bandcamp.com/', label: 'Bandcamp', path: ICON_PATHS.bandcamp },
+		{ href: 'https://www.youtube.com/@eyecreatures', label: 'YouTube', path: ICON_PATHS.youtube },
 		{ href: 'https://www.facebook.com/eyecreatures', label: 'Facebook', path: ICON_PATHS.facebook },
 		{
 			href: 'https://www.instagram.com/eyecreaturesband',
 			label: 'Instagram',
 			path: ICON_PATHS.instagram
-		},
-		{ href: 'https://www.youtube.com/@eyecreatures', label: 'YouTube', path: ICON_PATHS.youtube }
+		}
 	];
 </script>
 

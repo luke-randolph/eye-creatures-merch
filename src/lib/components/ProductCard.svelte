@@ -16,6 +16,8 @@
 			src={imageUrl}
 			alt={product.name}
 			loading="lazy"
+			width="800"
+			height="800"
 			class="h-full w-full object-cover transition group-hover:scale-105"
 		/>
 	</div>
