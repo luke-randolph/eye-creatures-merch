@@ -1,4 +1,4 @@
-import { productImageUrl } from '$lib/sanityImage';
+import { productImageSrcset, productImageUrl } from '$lib/sanityImage';
 import type { Product } from '$lib/types';
 import type { SanityImageSource } from '@sanity/image-url';
 import { sanity } from './client';
@@ -37,11 +37,13 @@ function toProduct(doc: ProductDoc): Product {
 		description: doc.description,
 		sizes: doc.sizes,
 		imageUrl: productImageUrl(doc.mainImage),
+		imageSrcset: productImageSrcset(doc.mainImage),
 		colors:
 			doc.colors?.map((c) => ({
 				hex: c.hex,
 				label: c.label,
-				imageUrl: productImageUrl(c.image)
+				imageUrl: productImageUrl(c.image),
+				imageSrcset: productImageSrcset(c.image)
 			})) ?? null
 	};
 }

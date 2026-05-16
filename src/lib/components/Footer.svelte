@@ -1,5 +1,8 @@
 <script lang="ts">
+	import { MediaQuery } from 'svelte/reactivity';
 	import eyeGif from '$lib/assets/eye.gif';
+
+	const reducedMotion = new MediaQuery('prefers-reduced-motion: reduce');
 
 	// Simple Icons SVG paths. Inline to avoid a dependency; replace if a brand
 	// updates their mark.
@@ -36,57 +39,67 @@
 
 	const followUs: SocialLink[] = [
 		{ href: 'https://eyecreatures.bandcamp.com/', label: 'Bandcamp', path: ICON_PATHS.bandcamp },
+		{ href: 'https://www.youtube.com/@eyecreatures', label: 'YouTube', path: ICON_PATHS.youtube },
 		{ href: 'https://www.facebook.com/eyecreatures', label: 'Facebook', path: ICON_PATHS.facebook },
 		{
 			href: 'https://www.instagram.com/eyecreaturesband',
 			label: 'Instagram',
 			path: ICON_PATHS.instagram
-		},
-		{ href: 'https://www.youtube.com/@eyecreatures', label: 'YouTube', path: ICON_PATHS.youtube }
+		}
 	];
 </script>
 
 <footer class="mt-16 border-t border-neutral-800">
-	<div class="mx-auto grid max-w-6xl items-center gap-6 px-4 py-6 sm:grid-cols-3">
-		<div class="text-center sm:text-left">
-			<p class="mb-3 text-xs font-semibold tracking-widest text-white uppercase">Tune in:</p>
-			<div class="flex justify-center gap-3 sm:justify-start">
-				{#each tuneIn as link (link.label)}
-					<a
-						href={link.href}
-						target="_blank"
-						rel="external noopener noreferrer"
-						aria-label={link.label}
-						class="text-neutral-400 transition hover:text-white"
-					>
-						<svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor" aria-hidden="true">
-							<path d={link.path} />
-						</svg>
-					</a>
-				{/each}
+	<div class="mx-auto grid max-w-6xl grid-rows-2 items-center px-4 py-6 sm:grid-rows-1">
+		<div class="flex justify-center sm:hidden">
+			{#if !reducedMotion.current}
+				<img src={eyeGif} alt="" aria-hidden="true" class="h-18 w-auto" />
+			{/if}
+		</div>
+
+		<div class="flex justify-between">
+			<div class="text-center sm:text-left">
+				<p class="mb-3 text-xs font-semibold tracking-widest text-white uppercase">Tune in:</p>
+				<div class="flex justify-center gap-3 sm:justify-start">
+					{#each tuneIn as link (link.label)}
+						<a
+							href={link.href}
+							target="_blank"
+							rel="external noopener noreferrer"
+							aria-label={link.label}
+							class="text-neutral-400 transition hover:text-white"
+						>
+							<svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor" aria-hidden="true">
+								<path d={link.path} />
+							</svg>
+						</a>
+					{/each}
+				</div>
 			</div>
-		</div>
 
-		<div class="flex justify-center">
-			<img src={eyeGif} alt="" aria-hidden="true" class="h-18 w-auto" />
-		</div>
+			<div class="hidden justify-center sm:flex">
+				{#if !reducedMotion.current}
+					<img src={eyeGif} alt="" aria-hidden="true" class="h-18 w-auto" />
+				{/if}
+			</div>
 
-		<div class="text-center sm:text-right">
-			<p class="mb-3 text-xs font-semibold tracking-widest text-white uppercase">Follow us:</p>
-			<div class="flex justify-center gap-3 sm:justify-end">
-				{#each followUs as link (link.label)}
-					<a
-						href={link.href}
-						target="_blank"
-						rel="external noopener noreferrer"
-						aria-label={link.label}
-						class="text-neutral-400 transition hover:text-white"
-					>
-						<svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor" aria-hidden="true">
-							<path d={link.path} />
-						</svg>
-					</a>
-				{/each}
+			<div class="text-center sm:text-right">
+				<p class="mb-3 text-xs font-semibold tracking-widest text-white uppercase">Follow us:</p>
+				<div class="flex justify-center gap-3 sm:justify-end">
+					{#each followUs as link (link.label)}
+						<a
+							href={link.href}
+							target="_blank"
+							rel="external noopener noreferrer"
+							aria-label={link.label}
+							class="text-neutral-400 transition hover:text-white"
+						>
+							<svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor" aria-hidden="true">
+								<path d={link.path} />
+							</svg>
+						</a>
+					{/each}
+				</div>
 			</div>
 		</div>
 	</div>

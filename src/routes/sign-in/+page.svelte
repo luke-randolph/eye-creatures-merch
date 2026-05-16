@@ -111,7 +111,7 @@
 		Continue with Google
 	</button>
 
-	<div class="my-6 flex items-center gap-3 text-xs text-neutral-500">
+	<div class="my-6 flex items-center gap-3 text-xs text-neutral-400">
 		<div class="h-px flex-1 bg-neutral-800"></div>
 		<span>or</span>
 		<div class="h-px flex-1 bg-neutral-800"></div>
@@ -127,6 +127,8 @@
 					required
 					autocomplete="email"
 					placeholder="you@example.com"
+					aria-invalid={error ? 'true' : undefined}
+					aria-describedby={error ? 'form-error' : undefined}
 					class="w-full rounded-md border border-neutral-700 bg-neutral-950 px-3 py-2 text-white placeholder-neutral-500 focus:border-white focus:outline-none"
 				/>
 			</label>
@@ -150,6 +152,8 @@
 					autocomplete="one-time-code"
 					maxlength="6"
 					placeholder="123456"
+					aria-invalid={error ? 'true' : undefined}
+					aria-describedby={error ? 'form-error' : undefined}
 					class="w-full rounded-md border border-neutral-700 bg-neutral-950 px-3 py-2 text-center text-lg tracking-[0.5em] text-white placeholder-neutral-500 focus:border-white focus:outline-none"
 				/>
 			</label>
@@ -172,9 +176,9 @@
 	{/if}
 
 	{#if info}
-		<p class="mt-4 text-sm text-neutral-400">{info}</p>
+		<p class="mt-4 text-sm text-neutral-400" aria-live="polite">{info}</p>
 	{/if}
 	{#if error}
-		<p class="mt-4 text-sm text-red-400">{error}</p>
+		<p id="form-error" class="mt-4 text-sm text-red-400" role="alert">{error}</p>
 	{/if}
 </div>

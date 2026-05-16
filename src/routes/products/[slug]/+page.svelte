@@ -22,6 +22,7 @@
 	});
 
 	let imageUrl = $derived(selectedColor ? selectedColor.imageUrl : product.imageUrl);
+	let imageSrcset = $derived(selectedColor ? selectedColor.imageSrcset : product.imageSrcset);
 
 	let needsSize = $derived(!!product.sizes && product.sizes.length > 0);
 	let canAdd = $derived(!needsSize || selectedSize !== null);
@@ -44,7 +45,15 @@
 
 <div class="grid gap-8 md:grid-cols-2">
 	<div class="overflow-hidden rounded border border-neutral-800 bg-neutral-950">
-		<img src={imageUrl} alt={product.name} class="aspect-square w-full object-cover" />
+		<img
+			src={imageUrl}
+			srcset={imageSrcset}
+			sizes="(min-width: 768px) 544px, 92vw"
+			alt={product.name}
+			width="800"
+			height="800"
+			class="aspect-square w-full object-cover"
+		/>
 	</div>
 
 	<div class="flex flex-col gap-6">
@@ -98,7 +107,7 @@
 		</button>
 
 		{#if needsSize && !selectedSize}
-			<p class="text-sm text-neutral-500">Select a size to add to cart.</p>
+			<p class="text-sm text-neutral-400">Select a size to add to cart.</p>
 		{/if}
 	</div>
 </div>

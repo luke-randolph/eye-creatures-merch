@@ -51,43 +51,55 @@
 			{#each cart.items as item (item.productId + ':' + (item.size ?? '') + ':' + (item.color?.hex ?? ''))}
 				{@const imageUrl = item.color?.imageUrl ?? item.imageUrl}
 				{@const colorHex = item.color?.hex ?? null}
-				<li class="flex items-center gap-4 py-4">
+				<li class="flex flex-wrap items-start gap-4 py-4 sm:items-center">
 					<a
 						href={resolve('/products/[slug]', { slug: item.slug })}
 						class="shrink-0 overflow-hidden rounded border border-neutral-800 bg-neutral-950"
 					>
-						<img src={imageUrl} alt={item.name} class="h-20 w-20 object-cover" />
+						<img
+							src={imageUrl}
+							alt={item.name}
+							width="128"
+							height="128"
+							class="h-32 w-32 object-cover"
+						/>
 					</a>
 
 					<div class="min-w-0 flex-1">
 						<a
 							href={resolve('/products/[slug]', { slug: item.slug })}
-							class="font-medium hover:underline">{item.name}</a
+							class="text-sm font-medium hover:underline sm:text-base">{item.name}</a
 						>
 						{#if item.color}
-							<p class="text-sm text-neutral-400">Color: {item.color.label}</p>
+							<p class="text-sm text-neutral-400 sm:text-base">Color: {item.color.label}</p>
 						{/if}
 						{#if item.size}
-							<p class="text-sm text-neutral-400">Size: {item.size}</p>
+							<p class="text-sm text-neutral-400 sm:text-base">Size: {item.size}</p>
 						{/if}
-						<p class="mt-1 text-sm text-neutral-400 tabular-nums">${item.price} each</p>
+						<p class="mt-1 text-sm text-neutral-400 tabular-nums sm:text-base">
+							${item.price} each
+						</p>
 					</div>
 
-					<QuantitySelector
-						value={item.quantity}
-						onChange={(n) => cart.updateQuantity(item.productId, item.size, colorHex, n)}
-					/>
-
-					<div class="w-20 text-right tabular-nums">${item.price * item.quantity}</div>
-
-					<button
-						type="button"
-						onclick={() => cart.removeItem(item.productId, item.size, colorHex)}
-						aria-label="Remove {item.name} from cart"
-						class="p-2 text-neutral-500 hover:text-white"
+					<div
+						class="flex flex-[0_0_100%] shrink-0 items-center justify-end gap-2 sm:flex-auto sm:gap-4"
 					>
-						<X class="h-5 w-5" aria-hidden="true" />
-					</button>
+						<QuantitySelector
+							value={item.quantity}
+							onChange={(n) => cart.updateQuantity(item.productId, item.size, colorHex, n)}
+						/>
+
+						<div class="w-20 text-right tabular-nums">${item.price * item.quantity}</div>
+
+						<button
+							type="button"
+							onclick={() => cart.removeItem(item.productId, item.size, colorHex)}
+							aria-label="Remove {item.name} from cart"
+							class="-mr-2 p-2 text-neutral-500 hover:text-white sm:mr-0"
+						>
+							<X class="h-5 w-5" aria-hidden="true" />
+						</button>
+					</div>
 				</li>
 			{/each}
 		</ul>

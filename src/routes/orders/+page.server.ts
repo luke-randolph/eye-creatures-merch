@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { desc, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { db } from '$lib/server/db';
 import { orders } from '$lib/server/db/orders.schema';
 import type { PageServerLoad } from './$types';
@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const rows = await db
 		.select()
 		.from(orders)
-		.where(eq(orders.userId, locals.user.id))
+		.where(and(eq(orders.userId, locals.user.id), eq(orders.status, 'paid')))
 		.orderBy(desc(orders.createdAt));
 
 	return { orders: rows };

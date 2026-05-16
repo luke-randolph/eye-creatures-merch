@@ -9,6 +9,7 @@
 
 	let open = $state(false);
 	let menuEl = $state<HTMLDivElement | null>(null);
+	let triggerEl = $state<HTMLButtonElement | null>(null);
 
 	function toggle() {
 		open = !open;
@@ -24,7 +25,16 @@
 	}
 
 	function onKeydown(e: KeyboardEvent) {
-		if (e.key === 'Escape') close();
+		if (e.key === 'Escape' && open) {
+			close();
+			triggerEl?.focus();
+		}
+	}
+
+	// Close once focus leaves the menu entirely (e.g. tabbing past the last item).
+	function onFocusOut(e: FocusEvent) {
+		if (!open) return;
+		if (menuEl && !menuEl.contains(e.relatedTarget as Node)) close();
 	}
 
 	async function signOut() {
@@ -36,11 +46,12 @@
 
 <svelte:window onclick={onDocumentClick} onkeydown={onKeydown} />
 
-<div bind:this={menuEl} class="relative">
+<div bind:this={menuEl} class="relative" onfocusout={onFocusOut}>
 	<button
+		bind:this={triggerEl}
 		type="button"
 		onclick={toggle}
-		aria-haspopup="menu"
+		aria-haspopup="true"
 		aria-expanded={open}
 		aria-label="Account menu"
 		class="inline-flex items-center gap-1 rounded p-2 text-neutral-200 hover:bg-neutral-900 hover:text-white"
@@ -51,7 +62,6 @@
 
 	{#if open}
 		<div
-			role="menu"
 			class="absolute right-0 z-50 mt-2 w-56 overflow-hidden rounded-md border border-neutral-800 bg-neutral-950 text-sm text-neutral-200 shadow-lg"
 		>
 			<div class="border-b border-neutral-800 px-4 py-3">
@@ -62,7 +72,6 @@
 			</div>
 			<a
 				href={resolve('/orders')}
-				role="menuitem"
 				onclick={close}
 				class="block px-4 py-2 hover:bg-neutral-900 hover:text-white"
 			>
@@ -70,7 +79,6 @@
 			</a>
 			<button
 				type="button"
-				role="menuitem"
 				onclick={signOut}
 				class="block w-full px-4 py-2 text-left hover:bg-neutral-900 hover:text-white"
 			>

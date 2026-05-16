@@ -22,6 +22,7 @@
 	// Re-hovering replays from frame 1.
 	$effect(() => {
 		if (!hovering || glitchSrcs.length === 0) return;
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 		frameIndex = 0;
 		animating = true;
 		let i = 0;
