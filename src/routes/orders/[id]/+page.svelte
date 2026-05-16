@@ -1,24 +1,10 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import { formatAmount, formatDate } from '$lib/format';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 	let order = $derived(data.order);
-
-	function formatAmount(cents: number, currency: string) {
-		return new Intl.NumberFormat('en-US', {
-			style: 'currency',
-			currency: currency.toUpperCase()
-		}).format(cents / 100);
-	}
-
-	function formatDate(date: Date | string) {
-		return new Date(date).toLocaleDateString('en-US', {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric'
-		});
-	}
 </script>
 
 <svelte:head>
@@ -33,7 +19,7 @@
 	<div>
 		<h1 class="text-2xl font-bold text-white">Order</h1>
 		<p class="mt-1 text-sm text-neutral-400">
-			Placed {formatDate(order.createdAt)} ·
+			Placed {formatDate(order.createdAt, 'long')} ·
 			<span class="tracking-wide uppercase">{order.status}</span>
 		</p>
 	</div>

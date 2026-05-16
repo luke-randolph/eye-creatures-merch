@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
 	// import greenFacesBanner from '$lib/assets/banners/green-faces.png?enhanced';
+	import CategoryFilter from '$lib/components/CategoryFilter.svelte';
 	import ProductCard from '$lib/components/ProductCard.svelte';
 	import type { PageData } from './$types';
 
@@ -15,29 +15,7 @@
 		aria-hidden="true"
 		class="mb-8 w-full rounded border border-neutral-800 object-cover"
 	/> -->
-	<div class="mb-8 flex flex-wrap justify-end gap-2" role="group" aria-label="Filter by category">
-		<a
-			href={resolve('/')}
-			aria-current={data.activeCategory === null ? 'page' : undefined}
-			class="rounded-full border px-4 py-1 text-sm transition {data.activeCategory === null
-				? 'border-white bg-white text-black'
-				: 'border-neutral-700 text-neutral-300 hover:border-neutral-500 hover:text-white'}"
-		>
-			All
-		</a>
-		{#each data.categories as category (category.value)}
-			{@const isActive = data.activeCategory === category.value}
-			<a
-				href="{resolve('/')}?category={category.value}"
-				aria-current={isActive ? 'page' : undefined}
-				class="rounded-full border px-4 py-1 text-sm transition {isActive
-					? 'border-white bg-white text-black'
-					: 'border-neutral-700 text-neutral-300 hover:border-neutral-500 hover:text-white'}"
-			>
-				{category.label}
-			</a>
-		{/each}
-	</div>
+	<CategoryFilter categories={data.categories} activeCategory={data.activeCategory} />
 
 	{#if data.products.length === 0}
 		<p class="text-neutral-400">No products in this category yet.</p>

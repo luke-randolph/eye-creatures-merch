@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { pillClass } from '$lib/styles';
+
 	type Props = {
 		sizes: string[];
 		selected: string | null;
@@ -15,9 +17,9 @@
 			type="button"
 			onclick={() => onSelect(size)}
 			aria-pressed={isSelected}
-			class="min-w-10 rounded border px-3 py-1 text-sm font-medium transition {isSelected
-				? 'border-white bg-white text-black'
-				: 'border-neutral-700 text-neutral-300 hover:border-neutral-500 hover:text-white'}"
+			class="min-w-10 rounded border px-3 py-1 text-sm font-medium transition {pillClass(
+				isSelected
+			)}"
 		>
 			{size}
 		</button>

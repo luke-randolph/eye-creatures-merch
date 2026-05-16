@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import Button from '$lib/components/Button.svelte';
 	import ColorSelector from '$lib/components/ColorSelector.svelte';
 	import QuantitySelector from '$lib/components/QuantitySelector.svelte';
 	import SizeSelector from '$lib/components/SizeSelector.svelte';
+	import { resolveProductImage } from '$lib/image';
 	import { cart } from '$lib/stores/cart.svelte';
 	import type { ColorOption } from '$lib/types';
 	import { ChevronLeft } from 'lucide-svelte';
@@ -21,8 +23,7 @@
 		selectedColor = product.colors?.[0] ?? null;
 	});
 
-	let imageUrl = $derived(selectedColor ? selectedColor.imageUrl : product.imageUrl);
-	let imageSrcset = $derived(selectedColor ? selectedColor.imageSrcset : product.imageSrcset);
+	let image = $derived(resolveProductImage(product, selectedColor));
 
 	let needsSize = $derived(!!product.sizes && product.sizes.length > 0);
 	let canAdd = $derived(!needsSize || selectedSize !== null);
@@ -46,8 +47,8 @@
 <div class="grid gap-8 md:grid-cols-2">
 	<div class="overflow-hidden rounded border border-neutral-800 bg-neutral-950">
 		<img
-			src={imageUrl}
-			srcset={imageSrcset}
+			src={image.url}
+			srcset={image.srcset}
 			sizes="(min-width: 768px) 544px, 92vw"
 			alt={product.name}
 			width="800"
@@ -95,16 +96,15 @@
 			<QuantitySelector value={quantity} onChange={(n) => (quantity = n)} />
 		</div>
 
-		<button
-			type="button"
+		<Button
+			variant={justAdded ? 'success' : 'primary'}
+			size="lg"
 			onclick={addToCart}
 			disabled={!canAdd}
-			class="w-full rounded px-6 py-3 font-bold tracking-wide transition disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto {justAdded
-				? 'bg-success text-white'
-				: 'bg-white text-black hover:bg-neutral-200'}"
+			class="w-full sm:w-auto"
 		>
 			{justAdded ? 'Added to cart' : 'Add to cart'}
-		</button>
+		</Button>
 
 		{#if needsSize && !selectedSize}
 			<p class="text-sm text-neutral-400">Select a size to add to cart.</p>
