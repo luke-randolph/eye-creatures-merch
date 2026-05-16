@@ -1,23 +1,9 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import { formatAmount, formatDate } from '$lib/format';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
-
-	function formatAmount(cents: number, currency: string) {
-		return new Intl.NumberFormat('en-US', {
-			style: 'currency',
-			currency: currency.toUpperCase()
-		}).format(cents / 100);
-	}
-
-	function formatDate(date: Date | string) {
-		return new Date(date).toLocaleDateString('en-US', {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric'
-		});
-	}
 
 	function itemCount(items: (typeof data.orders)[number]['items']) {
 		return items.reduce((sum, i) => sum + i.quantity, 0);

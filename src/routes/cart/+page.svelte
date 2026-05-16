@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import Button from '$lib/components/Button.svelte';
 	import QuantitySelector from '$lib/components/QuantitySelector.svelte';
+	import { resolveProductImage } from '$lib/image';
 	import { cart } from '$lib/stores/cart.svelte';
 	import { X } from 'lucide-svelte';
 
@@ -49,7 +51,7 @@
 	{:else}
 		<ul class="flex flex-col divide-y divide-neutral-800 border-y border-neutral-800">
 			{#each cart.items as item (item.productId + ':' + (item.size ?? '') + ':' + (item.color?.hex ?? ''))}
-				{@const imageUrl = item.color?.imageUrl ?? item.imageUrl}
+				{@const imageUrl = resolveProductImage(item, item.color).url}
 				{@const colorHex = item.color?.hex ?? null}
 				<li class="flex flex-wrap items-start gap-4 py-4 sm:items-center">
 					<a
@@ -113,14 +115,9 @@
 			{#if checkoutError}
 				<p class="text-sm text-red-400">{checkoutError}</p>
 			{/if}
-			<button
-				type="button"
-				onclick={checkout}
-				disabled={checkoutPending}
-				class="rounded bg-white px-6 py-3 font-bold tracking-wide text-black hover:bg-neutral-200 disabled:opacity-50"
-			>
+			<Button size="lg" onclick={checkout} disabled={checkoutPending}>
 				{checkoutPending ? 'Redirecting…' : 'Checkout'}
-			</button>
+			</Button>
 		</div>
 	{/if}
 </section>

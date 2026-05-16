@@ -25,20 +25,24 @@
 		}
 	}
 
-	async function sendOtp(e: SubmitEvent) {
-		e.preventDefault();
+	async function requestOtp(resend: boolean): Promise<boolean> {
 		error = null;
 		info = null;
-		if (!email) return;
 		loading = true;
 		const res = await authClient.emailOtp.sendVerificationOtp({ email, type: 'sign-in' });
 		loading = false;
 		if (res.error) {
-			error = res.error.message || 'Could not send code';
-			return;
+			error = res.error.message || `Could not ${resend ? 'resend' : 'send'} code`;
+			return false;
 		}
-		info = `We sent a 6-digit code to ${email}.`;
-		step = 'otp';
+		info = resend ? `New code sent to ${email}.` : `We sent a 6-digit code to ${email}.`;
+		return true;
+	}
+
+	async function sendOtp(e: SubmitEvent) {
+		e.preventDefault();
+		if (!email) return;
+		if (await requestOtp(false)) step = 'otp';
 	}
 
 	async function verifyOtp(e: SubmitEvent) {
@@ -57,16 +61,7 @@
 	}
 
 	async function resendOtp() {
-		error = null;
-		info = null;
-		loading = true;
-		const res = await authClient.emailOtp.sendVerificationOtp({ email, type: 'sign-in' });
-		loading = false;
-		if (res.error) {
-			error = res.error.message || 'Could not resend code';
-			return;
-		}
-		info = `New code sent to ${email}.`;
+		await requestOtp(true);
 	}
 
 	function backToEmail() {

@@ -2,6 +2,8 @@
 	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
+	import Button from '$lib/components/Button.svelte';
+	import { formatAmount } from '$lib/format';
 	import { cart } from '$lib/stores/cart.svelte';
 	import type { PageServerData } from './$types';
 
@@ -11,12 +13,7 @@
 		cart.clear();
 	});
 
-	const formatted = $derived(
-		new Intl.NumberFormat('en-US', {
-			style: 'currency',
-			currency: data.currency
-		}).format(data.amountTotal / 100)
-	);
+	const formatted = $derived(formatAmount(data.amountTotal, data.currency));
 </script>
 
 <section class="flex flex-col items-start gap-4">
@@ -29,26 +26,13 @@
 	</p>
 
 	<div class="flex flex-wrap gap-3 pt-2">
-		<a
-			href={resolve('/')}
-			class="rounded bg-white px-4 py-2 font-bold tracking-wide text-black hover:bg-neutral-200"
-		>
-			Back to shop
-		</a>
+		<Button href={resolve('/')}>Back to shop</Button>
 		{#if page.data.user}
-			<a
-				href={resolve('/orders')}
-				class="rounded border border-neutral-700 px-4 py-2 font-bold tracking-wide text-white hover:bg-neutral-900"
-			>
-				View your orders
-			</a>
+			<Button href={resolve('/orders')} variant="outline">View your orders</Button>
 		{:else}
-			<a
-				href={resolve('/sign-in?redirectTo=/orders')}
-				class="rounded border border-neutral-700 px-4 py-2 font-bold tracking-wide text-white hover:bg-neutral-900"
-			>
+			<Button href={resolve('/sign-in?redirectTo=/orders')} variant="outline">
 				Sign in to save your order history
-			</a>
+			</Button>
 		{/if}
 	</div>
 </section>

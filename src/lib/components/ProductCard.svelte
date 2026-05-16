@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import { resolveProductImage } from '$lib/image';
 	import type { Product } from '$lib/types';
 
 	type Props = { product: Product };
 	let { product }: Props = $props();
-	let firstColor = $derived(product.colors?.[0]);
-	let imageUrl = $derived(firstColor?.imageUrl ?? product.imageUrl);
-	let imageSrcset = $derived(firstColor?.imageSrcset ?? product.imageSrcset);
+	let image = $derived(resolveProductImage(product, product.colors?.[0]));
 </script>
 
 <a
@@ -15,8 +14,8 @@
 >
 	<div class="aspect-square w-full overflow-hidden bg-neutral-900">
 		<img
-			src={imageUrl}
-			srcset={imageSrcset}
+			src={image.url}
+			srcset={image.srcset}
 			sizes="(min-width: 1024px) 262px, (min-width: 640px) 45vw, 92vw"
 			alt={product.name}
 			loading="lazy"
