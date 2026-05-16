@@ -4,7 +4,9 @@
 
 	type Props = { product: Product };
 	let { product }: Props = $props();
-	let imageUrl = $derived(product.colors?.[0]?.imageUrl ?? product.imageUrl);
+	let firstColor = $derived(product.colors?.[0]);
+	let imageUrl = $derived(firstColor?.imageUrl ?? product.imageUrl);
+	let imageSrcset = $derived(firstColor?.imageSrcset ?? product.imageSrcset);
 </script>
 
 <a
@@ -14,6 +16,8 @@
 	<div class="aspect-square w-full overflow-hidden bg-neutral-900">
 		<img
 			src={imageUrl}
+			srcset={imageSrcset}
+			sizes="(min-width: 1024px) 262px, (min-width: 640px) 45vw, 92vw"
 			alt={product.name}
 			loading="lazy"
 			width="800"

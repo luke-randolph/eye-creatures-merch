@@ -3,11 +3,43 @@ import type { CartItem, ColorOption, Product } from '$lib/types';
 
 const STORAGE_KEY = 'eye-creatures-cart';
 
+function isColorOption(value: unknown): value is ColorOption {
+	if (typeof value !== 'object' || value === null) return false;
+	const c = value as Record<string, unknown>;
+	return typeof c.hex === 'string' && typeof c.label === 'string' && typeof c.imageUrl === 'string';
+}
+
+function isCartItem(value: unknown): value is CartItem {
+	if (typeof value !== 'object' || value === null) return false;
+	const it = value as Record<string, unknown>;
+	return (
+		typeof it.productId === 'string' &&
+		typeof it.slug === 'string' &&
+		typeof it.name === 'string' &&
+		typeof it.price === 'number' &&
+		typeof it.imageUrl === 'string' &&
+		(it.size === null || typeof it.size === 'string') &&
+		(it.color === null || isColorOption(it.color)) &&
+		typeof it.quantity === 'number' &&
+		Number.isInteger(it.quantity) &&
+		it.quantity > 0
+	);
+}
+
+// Parse the persisted cart defensively: a stale or corrupt entry (e.g. an older
+// CartItem shape) is dropped rather than trusted, which would crash the cart.
 function loadInitial(): CartItem[] {
 	if (!browser) return [];
 	try {
 		const raw = localStorage.getItem(STORAGE_KEY);
-		return raw ? (JSON.parse(raw) as CartItem[]) : [];
+		if (!raw) return [];
+		const parsed: unknown = JSON.parse(raw);
+		if (!Array.isArray(parsed)) return [];
+		const items = parsed.filter(isCartItem);
+		if (items.length !== parsed.length) {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+		}
+		return items;
 	} catch {
 		return [];
 	}

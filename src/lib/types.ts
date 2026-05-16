@@ -1,4 +1,9 @@
-export type ColorOption = { hex: string; label: string; imageUrl: string };
+export type ColorOption = {
+	hex: string;
+	label: string;
+	imageUrl: string;
+	imageSrcset?: string;
+};
 
 export type Product = {
 	id: string;
@@ -9,6 +14,7 @@ export type Product = {
 	description: string | null;
 	sizes: string[] | null;
 	imageUrl: string;
+	imageSrcset?: string;
 	colors: ColorOption[] | null;
 };
 
