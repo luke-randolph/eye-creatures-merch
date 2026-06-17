@@ -26,7 +26,7 @@ Checkout flow:
 
 ## Prerequisites
 
-- **Node.js** 20 or newer (CI runs on 24)
+- **Node.js** 24 or newer (matches `.nvmrc` and CI)
 - **Docker Desktop** (running, for local Postgres via `compose.yaml`)
 - **Git**
 - A **Sanity account** with access to the `qvmho7ys` project (invite via [manage.sanity.io](https://manage.sanity.io))

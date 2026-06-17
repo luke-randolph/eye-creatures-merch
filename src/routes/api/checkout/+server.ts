@@ -14,6 +14,8 @@ type IncomingItem = {
 	quantity: number;
 };
 
+const MAX_ITEM_QUANTITY = 99;
+
 export const POST: RequestHandler = async ({ request, locals }) => {
 	const body = (await request.json().catch(() => null)) as { items?: IncomingItem[] } | null;
 	const incoming = body?.items;
@@ -23,7 +25,12 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 	const validated = await Promise.all(
 		incoming.map(async (item) => {
-			if (!item?.slug || !Number.isInteger(item.quantity) || item.quantity < 1) {
+			if (
+				!item?.slug ||
+				!Number.isInteger(item.quantity) ||
+				item.quantity < 1 ||
+				item.quantity > MAX_ITEM_QUANTITY
+			) {
 				throw error(400, 'Invalid cart item');
 			}
 
