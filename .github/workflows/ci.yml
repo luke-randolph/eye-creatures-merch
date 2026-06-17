@@ -41,6 +41,14 @@ jobs:
 
   e2e:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    # Browsers + system deps come pre-baked in this image, so there is no
+    # `playwright install` download step (which hangs at 100% during extraction
+    # on the bare runner). The tag MUST match the @playwright/test version in
+    # package-lock.json, or Playwright re-downloads a matching browser.
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
 
     # Placeholder values — the smoke test doesn't authenticate or hit Sanity.
     # DATABASE_URL only needs to be a parseable connection string.
@@ -65,9 +73,6 @@ jobs:
           cache: npm
 
       - run: npm ci
-
-      - name: Install Playwright browser
-        run: npx playwright install --with-deps chromium
 
       - name: Run smoke e2e
         run: npm run test:e2e

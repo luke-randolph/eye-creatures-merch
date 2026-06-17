@@ -26,7 +26,7 @@ Checkout flow:
 
 ## Prerequisites
 
-- **Node.js** 20 or newer (CI runs on 24)
+- **Node.js** 24 or newer (matches `.nvmrc` and CI)
 - **Docker Desktop** (running, for local Postgres via `compose.yaml`)
 - **Git**
 - A **Sanity account** with access to the `qvmho7ys` project (invite via [manage.sanity.io](https://manage.sanity.io))
@@ -143,6 +143,15 @@ Two workflows:
 ## Pre-commit hook
 
 Every commit runs `npx lint-staged && npm run check` via husky (`.husky/pre-commit`). `lint-staged` formats and lints staged files; `check` type-checks the project. If either fails, the commit is rejected. Bypass with `--no-verify` only when you really mean it.
+
+## API endpoints
+
+Both are internal — `/api/checkout` is called by the cart page, `/api/stripe/webhook` only by Stripe. Not a public API.
+
+| Method & path              | Body → Response                                                                                                                                                      |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `POST /api/checkout`       | `{ items: [{ slug, size, colorHex, quantity (1–99) }] }` → `{ url }` (Stripe Checkout). Prices are recomputed server-side from Sanity. `400` on a bad or empty cart. |
+| `POST /api/stripe/webhook` | Signature-verified Stripe event. `checkout.session.completed` → order `paid`, `checkout.session.expired` → `expired`. `400` on a bad signature.                      |
 
 ## Project layout
 
